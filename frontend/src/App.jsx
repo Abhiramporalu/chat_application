@@ -14,7 +14,7 @@ const getUserId = () => {
   return userId;
 };
 
-const socket = io('https://adverayze-2bug.onrender.com');
+const socket = io('https://adverayze-2.onrender.com');
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     // Fetch initial messages
-    fetch('https://adverayze-2bug.onrender.com/api/messages')
+    fetch('https://adverayze-2.onrender.com/api/messages')
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
