@@ -27,7 +27,12 @@ function App() {
     fetch('https://adverayze-2bug.onrender.com/api/messages')
       .then((res) => res.json())
       .then((data) => {
-        setMessages(data);
+        if (Array.isArray(data)) {
+          setMessages(data);
+        } else {
+          console.error("Backend returned an error instead of an array:", data);
+          setMessages([]);
+        }
       })
       .catch((err) => console.error('Error fetching messages:', err));
 
