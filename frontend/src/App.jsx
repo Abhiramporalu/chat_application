@@ -14,7 +14,7 @@ const getUserId = () => {
   return userId;
 };
 
-const socket = io('http://localhost:4000');
+const socket = io('https://adverayze-2bug.onrender.com');
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     // Fetch initial messages
-    fetch('http://localhost:4000/api/messages')
+    fetch('https://adverayze-2bug.onrender.com/api/messages')
       .then((res) => res.json())
       .then((data) => {
         setMessages(data);
@@ -37,27 +37,27 @@ function App() {
     });
 
     socket.on('messageDeletedForMe', ({ messageId }) => {
-      setMessages((prev) => 
-        prev.map(msg => 
-          msg._id === messageId 
-            ? { ...msg, deletedForUsers: [...(msg.deletedForUsers || []), userId] } 
+      setMessages((prev) =>
+        prev.map(msg =>
+          msg._id === messageId
+            ? { ...msg, deletedForUsers: [...(msg.deletedForUsers || []), userId] }
             : msg
         )
       );
     });
 
     socket.on('messageDeletedForEveryone', ({ messageId }) => {
-      setMessages((prev) => 
-        prev.map(msg => 
-          msg._id === messageId 
-            ? { ...msg, isDeletedForEveryone: true } 
+      setMessages((prev) =>
+        prev.map(msg =>
+          msg._id === messageId
+            ? { ...msg, isDeletedForEveryone: true }
             : msg
         )
       );
     });
 
     socket.on('messagePinnedToggled', (updatedMsg) => {
-      setMessages((prev) => 
+      setMessages((prev) =>
         prev.map(msg => msg._id === updatedMsg._id ? updatedMsg : msg)
       );
     });
@@ -98,9 +98,9 @@ function App() {
     socket.emit('togglePinMessage', { messageId });
   };
 
-  const pinnedMessages = messages.filter((msg) => 
-    msg.isPinned && 
-    !msg.isDeletedForEveryone && 
+  const pinnedMessages = messages.filter((msg) =>
+    msg.isPinned &&
+    !msg.isDeletedForEveryone &&
     !msg.deletedForUsers?.includes(userId)
   );
 
@@ -124,7 +124,7 @@ function App() {
                 <Pin size={14} color="var(--pinned-border)" />
                 {msg.content}
               </span>
-              <button 
+              <button
                 className="action-btn"
                 onClick={() => handleTogglePin(msg._id)}
                 title="Unpin Message"
@@ -146,8 +146,8 @@ function App() {
             const isDeletedForMe = msg.deletedForUsers?.includes(userId);
 
             return (
-              <div 
-                key={msg._id} 
+              <div
+                key={msg._id}
                 className={`message-wrapper ${isSentByMe ? 'sent' : 'received'}`}
               >
                 <div className={`message-bubble ${isDeletedForEveryone || isDeletedForMe ? 'message-deleted' : ''}`}>
@@ -159,7 +159,7 @@ function App() {
                     msg.content
                   )}
                 </div>
-                
+
                 <div className="message-meta">
                   <span>{format(new Date(msg.createdAt), 'HH:mm')}</span>
                   {msg.isPinned && !isDeletedForEveryone && !isDeletedForMe && <Pin size={12} color="var(--pinned-border)" />}
@@ -167,23 +167,23 @@ function App() {
 
                 {(!isDeletedForEveryone && !isDeletedForMe) && (
                   <div className="message-actions">
-                    <button 
-                      className="action-btn pin" 
+                    <button
+                      className="action-btn pin"
                       onClick={() => handleTogglePin(msg._id)}
                       title={msg.isPinned ? "Unpin" : "Pin message"}
                     >
                       <Pin size={14} />
                     </button>
-                    <button 
-                      className="action-btn delete" 
+                    <button
+                      className="action-btn delete"
                       onClick={() => handleDeleteForMe(msg._id)}
                       title="Delete for me"
                     >
                       <Trash2 size={14} /> Me
                     </button>
                     {isSentByMe && (
-                      <button 
-                        className="action-btn delete" 
+                      <button
+                        className="action-btn delete"
                         onClick={() => handleDeleteForEveryone(msg._id)}
                         title="Delete for everyone"
                       >
