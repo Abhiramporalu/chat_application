@@ -1,4 +1,4 @@
-# Adverayze Real-Time Chat Application
+# Real-Time Chat Application
 
 This is a full-stack real-time chat application built for the Adverayze technical assignment. It features instant messaging, deletion (for me/everyone), and pinning messages, utilizing a Node.js/Express backend with MongoDB and a modern React (Vite) frontend.
 
